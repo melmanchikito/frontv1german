@@ -5,14 +5,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <tittle></tittle>
+  <title>Ristorante Italini</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Arima+Madurai:wght@700&family=Mulish" rel="
-      stylesheet" />
+  <!-- Nueva combinación de fuentes -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Mulish:wght@300;400;600&display=swap"
+    rel="stylesheet"
+  />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="css/normalize.css" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
+
 
 <body>
   <header class="encabezado">
@@ -25,10 +32,13 @@
         </div>
         <nav class="navegacion ocultar">
           <a href="#">Inicio</a>
-          <a href="#">Sobre Nosotros</a>
-          <a href="#">Menú</a>
+          <a href="#nosotros">Sobre Nosotros</a>
+
+          <a href="#menu">Menú</a>
+
           <a href="#">Chef</a>
-          <a href="#">Contacto</a>
+          <a href="#contacto">Contacto</a>
+
         </nav>
         <div class="icono-menu"><span></span><span></span><span></span></div>
       </div>
@@ -36,7 +46,10 @@
     <div class="contenido-header">
       <div class="contenedor-encabezado">
         <div class="texto-encabezado">
-          <h2>¡Accoglienza!</h2>
+          <h2 class="titulo-hero">
+            <span>¡</span><span>A</span><span>C</span><span>C</span><span>O</span><span>G</span>
+            <span>L</span><span>I</span><span>E</span><span>N</span><span>Z</span><span>A</span><span>!</span>
+          </h2>
           <a href="#" class="btn bordes">Il nostro menú</a>
         </div>
         <video autoplay loop muted>
@@ -46,44 +59,53 @@
     </div>
     </div>
   </header>
-  <div class="contenedor-nosotros contenedor">
-    <div class="texto-nosotros">
-      <p class="bienvenido">Bienvenido a!</p>
-      <h1>Ristorante Italini</h1>
-      <p>
-        Donde Italia cobra vida en cada plato.
-        En el corazón de la ciudad, Ristorante Italini no es solo un restaurante: es un viaje directo a las calles
-        empedradas de Roma, a las colinas de la Toscana y a las costas de Amalfi. Aquí, la tradición italiana más
-        auténtica se encuentra con la pasión contemporánea por la excelencia gastronómica.
-        Cada mañana, nuestro chef y su brigada seleccionan los mejores ingredientes: tomates San Marzano recién
-        llegados, mozzarella di bufala DOP que se derrite en la boca, prosciutto di Parma cortado a cuchillo, aceite de
-        oliva virgen extra prensado en frío y pasta fresca elaborada en casa, segundo a segundo, como lo harían las
-        nonnas en sus cocinas.
-      </p>
-      <a href="#" class="btn btn-rojo">Contactar</a>
-    </div>
-    <div class="imagenes-nosotros">
-      <div class="imagen1">
-        <img src="assets/nosotros1.webp" alt="mujer comiendo pizza">
-      </div>
-      <div class="imagenes2">
-        <img src="assets/nosotros2.webp" alt="mujer comiendo pizza">
-        <img src="assets/nosotros3.webp" alt="plato con pasta">
-      </div>
+  <section id="nosotros" class="contenedor-nosotros contenedor">
+  <div class="texto-nosotros">
+    <p class="bienvenido">Bienvenido a!</p>
+    <h1>Ristorante Italini</h1>
+    <p>
+      Donde Italia cobra vida en cada plato.
+      En el corazón de la ciudad, Ristorante Italini no es solo un restaurante: es un viaje directo a las calles
+      empedradas de Roma, a las colinas de la Toscana y a las costas de Amalfi. Aquí, la tradición italiana más
+      auténtica se encuentra con la pasión contemporánea por la excelencia gastronómica.
+      Cada mañana, nuestro chef y su brigada seleccionan los mejores ingredientes: tomates San Marzano recién
+      llegados, mozzarella di bufala DOP que se derrite en la boca, prosciutto di Parma cortado a cuchillo, aceite de
+      oliva virgen extra prensado en frío y pasta fresca elaborada en casa, segundo a segundo, como lo harían las
+      nonnas en sus cocinas.
+    </p>
+    <a href="#" class="btn btn-rojo">Contactar</a>
+  </div>
 
-
+  <div class="imagenes-nosotros">
+    <div class="imagen1">
+      <img src="assets/nosotros1.webp" alt="mujer comiendo pizza">
     </div>
+    <div class="imagenes2">
+      <img src="assets/nosotros2.webp" alt="mujer comiendo pizza">
+      <img src="assets/nosotros3.webp" alt="plato con pasta">
+    </div>
+  </div>
+</section>
+
 
   </div>
-  <section class="menu contenedor">
-    <h2 class="texto-platillos">Platillos populares</h2>
-    <div class="botones-platillos">
+  <section id="menu" class="menu contenedor">
+
+  <h2 class="texto-platillos">Platillos populares</h2>
+
+  <div class="filtro-categorias">
+    <button class="btn btn-verde filtro-toggle">
+       Categorías
+    </button>
+
+    <div class="botones-platillos ocultar">
       <button class="todos btn btn-verde">Todos</button>
       <button class="ensaladas btn btn-verde">Ensaladas</button>
       <button class="pasta btn btn-verde">Pasta</button>
       <button class="pizza btn btn-verde">Pizza</button>
       <button class="postres btn btn-verde">Postres</button>
     </div>
+  </div>
     <div class="platillos">
       <div class="platillo" data-platillo="ensalada">
         <img src="assets/ensalada.webp" alt="ensalada">
@@ -160,7 +182,8 @@
     </div>
   </section>
 
-  <section class="reservas contenedor">
+  <section id="contacto" class="reservas contenedor">
+
     <div class="contenido-reservas">
       <div class="info-reservas">
         <h2>¡Prenota il tuo tavolo!</h2>
@@ -249,6 +272,48 @@
     </div>
   </section>
 
+    <section id="chefs" class="chefs contenedor">
+  <h2 class="titulo-chefs">I Nostri Chefcini</h2>
+  <p class="descripcion-chefs">
+    La passione, l’arte e la tradizione italiana nelle mani dei nostri maestri della cucina.
+  </p>
+
+  <div class="contenedor-chefs">
+
+    <div class="card-chef">
+      <img src="assets/chef1.jpg" alt="Chef Italiano 1">
+      <h3>Chef Adam Garcia</h3>
+      <p>Especialista en pasta fresca y recetas tradicionales romanas.</p>
+    </div>
+
+    <div class="card-chef">
+      <img src="assets/chef2.jpg" alt="Chef Italiano 2">
+      <h3>Chef Miguel Izquierdo</h3>
+      <p>Maestro pizzaiolo experto en masa napolitana de fermentación lenta.</p>
+    </div>
+
+    <div class="card-chef">
+      <img src="assets/chef3.jpg" alt="Chef Italiano 3">
+      <h3>Chef Bryan Machado</h3>
+      <p>Creador de los mejores postres italianos: tiramisú y panna cotta.</p>
+    </div>
+
+    <div class="card-chef">
+      <img src="assets/chef4.jpg" alt="Chef Italiano 4">
+      <h3>Chef Oscar Magallanes</h3>
+      <p>Apasionado por los mariscos y la cocina mediterránea auténtica.</p>
+    </div>
+
+    <div class="card-chef">
+      <img src="assets/chef5.jpg" alt="Chef Italiano 5">
+      <h3>Chef Ariel Solorzano</h3>
+      <p>Especialista en carnes, salsas y platos al estilo toscano.</p>
+    </div>
+
+  </div>
+</section>
+
+
   <footer class="footer">
     <div class="contenedor contenido-footer">
       <div class="footer-info">
@@ -257,10 +322,13 @@
       </div>
       <div class="footer-links">
         <h3>Enlaces</h3>
-        <a href="#">Sobre Nosotros</a>
-        <a href="#">Menú</a>
+        <a href="#nosotros">Sobre Nosotros</a>
+
+        <a href="#menu">Menú</a>
+
         <a href="#">Reservas</a>
-        <a href="#">Contacto</a>
+        <a href="#contacto">Contacto</a>
+
       </div>
       <div class="footer-contacto">
         <h3>Contacto</h3>

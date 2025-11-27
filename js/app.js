@@ -1,5 +1,7 @@
 const menu = document.querySelector(".icono-menu");
 const navegacion = document.querySelector(".navegacion");
+const filtroToggle = document.querySelector(".filtro-toggle");
+const contenedorBotones = document.querySelector(".botones-platillos");
 
 document.addEventListener("DOMContentLoaded", () => {
   eventos();
@@ -15,7 +17,16 @@ const abrirMenu = () => {
   navegacion.classList.remove("ocultar");
   botonCerrar();
 };
+const toggleFiltrosCategorias = () => {
+  const btnToggle = document.querySelector(".filtro-toggle");
+  const contenedor = document.querySelector(".botones-platillos");
 
+  if (!btnToggle || !contenedor) return;
+
+  btnToggle.addEventListener("click", () => {
+    contenedor.classList.toggle("ocultar");
+  });
+};
 const botonCerrar = () => {
   const botonCerrar = document.createElement("p");
   const overlay = document.createElement("div");
@@ -28,6 +39,25 @@ const botonCerrar = () => {
   navegacion.appendChild(botonCerrar);
   cerrarMenu(botonCerrar, overlay);
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+  eventos();
+  eventosMenu();
+  eventoFormulario();
+  toggleFiltrosCategorias(); // 👈 nuevo
+});
+
+const eventosFiltros = () => {
+  const filtroToggle = document.querySelector(".filtro-toggle");
+  const contenedorBotones = document.querySelector(".botones-platillos");
+
+  if (!filtroToggle || !contenedorBotones) return;
+
+  filtroToggle.addEventListener("click", () => {
+    contenedorBotones.classList.toggle("ocultar");
+  });
+};
+
 
 const cerrarMenu = (boton, overlay) => {
   boton.addEventListener("click", () => {
