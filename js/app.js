@@ -107,7 +107,7 @@ const cerrarMenu = (boton, overlay) => {
   };
 };
 
-// Funcionalidad de filtrado de platillos (optimizada)
+// Funcionalidad de filtrado de platillos
 const eventosMenu = () => {
   const botones = document.querySelectorAll(".botones-platillos button");
   const platillos = document.querySelectorAll(".platillo");
@@ -176,37 +176,7 @@ const eventoFormulario = () => {
 
       console.log("Datos de la reserva:", datos);
 
-      // TODO: Implementar fetch a tu API cuando esté lista
-      /*
-      try {
-        const respuesta = await fetch('URL_DE_TU_API/reservas', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(datos)
-        });
 
-        const resultado = await respuesta.json();
-        
-        if (respuesta.ok) {
-          alert('¡Reserva confirmada! Te hemos enviado un email de confirmación.');
-          formulario.reset();
-        } else {
-          alert('Hubo un error al procesar tu reserva. Inténtalo nuevamente.');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('Error de conexión. Por favor, verifica tu internet.');
-      }
-      */
-
-      // Simulación temporal (eliminar cuando implementes fetch real)
-      if (errores.length > 0) {
-        alert("Corrige los siguientes errores:\n\n" + errores.join("\n"));
-        errores = [];
-        return;
-      }
       alert(
         `¡Gracias ${datos.nombre}! Tu reserva para ${datos.personas} persona(s) el ${datos.fecha} a las ${datos.hora} ha sido registrada. Te contactaremos pronto.`
       );
