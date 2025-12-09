@@ -166,7 +166,7 @@ img {
   }
 
   .navegacion a:hover {
-    background: linear-gradient(135deg, var(--verde), var(--rojo));
+    background: linear-gradient(135deg, var(--rojo));
     color: var(--blanco);
     border-color: transparent;
     transform: translateY(-1px);
@@ -914,7 +914,7 @@ video {
   }
 
   .navegacion a:hover {
-    background: linear-gradient(135deg, var(--verde), var(--rojo));
+    background: linear-gradient(135deg, var(--rojo));
     color: var(--blanco);
     border-color: transparent;
     transform: translateY(-1px);
