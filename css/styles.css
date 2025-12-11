@@ -234,11 +234,12 @@ img {
   font-family: 'Cinzel', serif;
 }
 /* NAV ITALIANO */
-.navegacion a:nth-child(1) { color: #00a149; }   /* Verde */
-.navegacion a:nth-child(2) { color: #ffffff; }   /* Blanco */
-.navegacion a:nth-child(3) { color: #cc0000; }   /* Rojo */
-.navegacion a:nth-child(4) { color: #00a149; }   /* Verde */
-.navegacion a:nth-child(5) { color: #ffffff; }   /* Blanco */
+/* .navegacion a:nth-child(1) { color: #00a149; }   
+.navegacion a:nth-child(2) { color: #ffffff; }   
+.navegacion a:nth-child(3) { color: #cc0000; }  
+.navegacion a:nth-child(4) { color: #00a149; }   
+.navegacion a:nth-child(5) { color: #ffffff; }   
+ */
 
 .navegacion a {
   text-shadow: 0 0 8px rgba(255,255,255,0.2);
@@ -828,7 +829,7 @@ video {
 
 .contenido-footer {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 3rem;
   padding-bottom: 3rem;
   border-bottom: 2px solid #333;
