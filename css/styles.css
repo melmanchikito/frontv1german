@@ -925,7 +925,8 @@ video {
 /* GRID DE 5 CARDS */
 .contenedor-chefs {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
   gap: 3rem;
 }
 
