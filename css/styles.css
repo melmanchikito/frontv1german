@@ -924,9 +924,9 @@ video {
 
 /* GRID DE 5 CARDS */
 .contenedor-chefs {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
   gap: 3rem;
 }
 
