@@ -246,21 +246,20 @@ img {
   transition: text-shadow 0.3s ease, transform 0.3s ease;
 }
 /* Verde brillante */
-.navegacion a:nth-child(1),
+/* .navegacion a:nth-child(1),
 .navegacion a:nth-child(4) {
   text-shadow: 0 0 12px rgba(0,255,0,0.5);
-}
+} */
 
 /* Blanco brillante */
-.navegacion a:nth-child(2),
-.navegacion a:nth-child(5) {
+/* .navegacion a {
   text-shadow: 0 0 12px rgba(255,255,255,0.6);
-}
+} */
 
 /* Rojo brillante */
-.navegacion a:nth-child(3) {
+/* .navegacion a:nth-child(3) {
   text-shadow: 0 0 12px rgba(255,0,0,0.6);
-}
+} */
 .navegacion a:hover {
   transform: translateY(-3px);
   text-shadow: 0 0 20px rgba(255,255,255,1);
@@ -756,7 +755,7 @@ video {
 
 .contenido-footer {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 3rem;
   padding-bottom: 3rem;
   border-bottom: 2px solid #333;
@@ -818,7 +817,7 @@ video {
    SECCIÓN DE CHEFS
    ========================= */
 .chefs {
-  padding: 6rem 0;
+  padding: 4rem 0;
   text-align: center;
 }
 
@@ -855,7 +854,8 @@ video {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 2rem;
+  gap: rem;
+  padding: 0 1rem;
 }
 
 
@@ -871,7 +871,8 @@ video {
   transition: var(--transition-smooth);
   padding-bottom: 2rem;
   width: 100%;
-  max-width: 32rem;
+  max-width: 100%;
+  margin: 1rem auto;
 }
 
 .card-chef:hover {
@@ -881,7 +882,7 @@ video {
 
 .card-chef img {
   width: 100%;
-  height: 250px;
+  height: 290px;
   object-fit: cover;
 }
 
@@ -908,6 +909,26 @@ video {
 /* =========================
    MEDIA QUERIES
    ========================= */
+
+/* Móviles grandes (480px+) */
+@media (min-width: 480px) {
+  /* Chefs */
+  .card-chef {
+    max-width: 38rem;
+  }
+  
+  .card-chef img {
+    height: 240px;
+  }
+  
+  .contenedor-chefs {
+    gap: 2rem;
+  }
+  
+  .chefs {
+    padding: 5rem 0;
+  }
+}
 
 /* Tablets y pantallas medianas (768px+) */
 @media (min-width: 768px) {
@@ -989,6 +1010,9 @@ video {
   }
   
   /* Chefs */
+  .chefs {
+    padding: 6rem 0;
+  }
   .titulo-chefs {
     font-size: 4rem;
   }
@@ -1000,6 +1024,7 @@ video {
   
   .contenedor-chefs {
     gap: 2.5rem;
+    padding: 0;
   }
   
   .card-chef {
