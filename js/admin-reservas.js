@@ -119,7 +119,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${r.nombre}</td>
                 <td>${r.email}</td>
                 <td>${r.telefono}</td>
-                <td><strong>${r.fecha_hora}</strong></td>
+               <td><strong>${r.fecha} ${r.hora}</strong></td>
+
                 <td>${r.personas}</td>
                 <td>${r.ocasion || 'No especificada'}</td>
                 <td>${(r.comentarios || '').substring(0,50)}</td>
@@ -162,7 +163,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.abrirModalEditar = async function(id) {
         try {
-            const url = API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.obtener + id;
+           const url = API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.obtener + "?id=" + id;
+
             const r = await fetchAuth(url);
 
             if (!r.success) return alert(r.message);
