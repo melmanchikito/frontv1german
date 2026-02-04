@@ -1,6 +1,5 @@
 const API_CONFIG = {
-  baseURL: 'https://italianiphp.infinityfree.me/Proyecto-Restaurante-Italiano/api.php',
-  endpoints: {
+baseURL: 'https://italianiphp.infinityfree.me/Proyecto-Restaurante-Italiano/api_v2.php',  endpoints: {
     reservas: {
       crear: '?accion=crear',
       listar: '?accion=listar',
