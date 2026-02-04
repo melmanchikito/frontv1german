@@ -132,15 +132,23 @@
   background: var(--blanco);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-md);
-  overflow: hidden;
+
+  /* 👇 CAMBIO CLAVE */
+  overflow-x: auto;
+  overflow-y: hidden;
+
   margin-bottom: 4rem;
+  width: 100%;
 }
 
 .tabla-reservas {
   width: 100%;
+  min-width: 1400px;            /* 👈 permite que quepan todas las columnas */
   border-collapse: collapse;
   font-family: var(--parrafos);
+  table-layout: auto;
 }
+
 
 .tabla-reservas thead {
   background: linear-gradient(135deg, var(--oscuro) 0%, #2a2a2a 100%);
