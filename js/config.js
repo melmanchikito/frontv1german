@@ -5,6 +5,8 @@ const API_CONFIG = {
     reservas: {
       crear: '?controller=reserva&action=crear',
       listar: '?controller=reserva&action=listar',
+      obtener: '?controller=reserva&action=obtenerPorId&id=',
+      actualizarEstado: '?controller=reserva&action=actualizarEstado',
       actualizar: '?controller=reserva&action=actualizar',
       eliminar: '?controller=reserva&action=eliminar'
     },

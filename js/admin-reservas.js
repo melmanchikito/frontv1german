@@ -163,7 +163,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.abrirModalEditar = async function(id) {
         try {
-           const url = API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.obtener + "?id=" + id;
+           const url = API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.obtener + "&id=" + id;
+
 
             const r = await fetchAuth(url);
 
