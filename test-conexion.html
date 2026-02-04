@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test de Conexión API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test {
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #28a745; }
+        .error { background-color: #f8d7da; border-color: #dc3545; }
+        .info { background-color: #d1ecf1; border-color: #17a2b8; }
+        button {
+            padding: 10px 20px;
+            margin: 10px 5px;
+            cursor: pointer;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Diagnóstico de Conexión API - Ristorante Italini</h1>
+    
+    <div id="resultados"></div>
+
+    <h2>Pruebas de Conexión</h2>
+    
+    <button onclick="testAPIBase()">1. Probar Conexión Base API</button>
+    <button onclick="testAuthEndpoint()">2. Probar Endpoint de Auth</button>
+    <button onclick="testLogin()">3. Probar Login Completo</button>
+    <button onclick="testCORS()">4. Verificar CORS</button>
+
+    <script>
+        const resultados = document.getElementById('resultados');
+
+        // URL configurada (misma que en config.js)
+        const API_URL = 'http://localhost/Proyecto-Restaurante-Italiano/api.php';
+
+        function addResultado(titulo, contenido, tipo = 'info') {
+            const div = document.createElement('div');
+            div.className = `test ${tipo}`;
+            div.innerHTML = `<h3>${titulo}</h3><div>${contenido}</div>`;
+            resultados.insertBefore(div, resultados.firstChild);
+        }
+
+        async function testAPIBase() {
+            addResultado('⏳ Probando...', 'Conectando a la API base...', 'info');
+            
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                addResultado(
+                    '✅ Test 1: Conexión Base API',
+                    `<strong>Status:</strong> ${response.status}<br>
+                     <strong>Success:</strong> ${data.success}<br>
+                     <strong>Message:</strong> ${data.message}<br>
+                     <pre>${JSON.stringify(data, null, 2)}</pre>`,
+                    'success'
+                );
+            } catch (error) {
+                addResultado(
+                    '❌ Test 1: Error en Conexión Base',
+                    `<strong>Error:</strong> ${error.message}<br>
+                     <strong>Tipo:</strong> ${error.name}<br>
+                     <strong>Posibles causas:</strong>
+                     <ul>
+                         <li>XAMPP no está iniciado (Apache y MySQL)</li>
+                         <li>La URL no es correcta: <code>${API_URL}</code></li>
+                         <li>El archivo api.php no existe en esa ruta</li>
+                         <li>Problemas de CORS</li>
+                     </ul>`,
+                    'error'
+                );
+            }
+        }
+
+        async function testAuthEndpoint() {
+            addResultado('⏳ Probando...', 'Verificando endpoint de autenticación...', 'info');
+            
+            const url = API_URL + '?controller=auth&action=autenticar';
+            
+            try {
+                // Intentar GET primero (debería dar error de método)
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                addResultado(
+                    '⚠️ Test 2: Endpoint de Auth (GET)',
+                    `<strong>URL:</strong> ${url}<br>
+                     <strong>Status:</strong> ${response.status}<br>
+                     <strong>Response:</strong><br>
+                     <pre>${JSON.stringify(data, null, 2)}</pre>
+                     <em>Nota: Debe responder (aunque con error porque falta POST)</em>`,
+                    data.success === false ? 'success' : 'error'
+                );
+            } catch (error) {
+                addResultado(
+                    '❌ Test 2: Error en Endpoint de Auth',
+                    `<strong>Error:</strong> ${error.message}<br>
+                     <strong>URL probada:</strong> ${url}`,
+                    'error'
+                );
+            }
+        }
+
+        async function testLogin() {
+            addResultado('⏳ Probando...', 'Intentando login con credenciales...', 'info');
+            
+            const url = API_URL + '?controller=auth&action=autenticar';
+            
+            try {
+                const formData = new FormData();
+                formData.append('usuario', 'admin');
+                formData.append('password', 'admin123');
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    addResultado(
+                        '✅ Test 3: Login Exitoso',
+                        `<strong>Usuario:</strong> ${data.usuario}<br>
+                         <strong>Rol:</strong> ${data.rol}<br>
+                         <strong>Message:</strong> ${data.message}<br>
+                         <pre>${JSON.stringify(data, null, 2)}</pre>
+                         <em>✓ Las credenciales funcionan correctamente</em>`,
+                        'success'
+                    );
+                } else {
+                    addResultado(
+                        '❌ Test 3: Login Fallido',
+                        `<strong>Error:</strong> ${data.message}<br>
+                         <strong>Posibles causas:</strong>
+                         <ul>
+                             <li>Usuario 'admin' no existe en la BD</li>
+                             <li>La contraseña es incorrecta</li>
+                             <li>El campo 'estado' no es 1</li>
+                             <li>Problema en la tabla usuarios</li>
+                         </ul>
+                         <strong>SQL a verificar:</strong>
+                         <pre>SELECT * FROM usuarios WHERE usuario = 'admin' AND estado = 1;</pre>`,
+                        'error'
+                    );
+                }
+            } catch (error) {
+                addResultado(
+                    '❌ Test 3: Error en Login',
+                    `<strong>Error:</strong> ${error.message}<br>
+                     <strong>Stack:</strong> ${error.stack}`,
+                    'error'
+                );
+            }
+        }
+
+        async function testCORS() {
+            addResultado('⏳ Probando...', 'Verificando configuración CORS...', 'info');
+            
+            try {
+                const response = await fetch(API_URL);
+                
+                const corsHeaders = {
+                    'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
+                    'Access-Control-Allow-Methods': response.headers.get('Access-Control-Allow-Methods'),
+                    'Access-Control-Allow-Headers': response.headers.get('Access-Control-Allow-Headers'),
+                    'Content-Type': response.headers.get('Content-Type')
+                };
+                
+                const corsOK = corsHeaders['Access-Control-Allow-Origin'] !== null;
+                
+                addResultado(
+                    corsOK ? '✅ Test 4: CORS Configurado' : '❌ Test 4: CORS NO Configurado',
+                    `<strong>Headers CORS:</strong><br>
+                     <pre>${JSON.stringify(corsHeaders, null, 2)}</pre>
+                     ${corsOK ? '<em>✓ CORS está habilitado correctamente</em>' : '<em>✗ CORS no está configurado. Verifica .htaccess o api.php</em>'}`,
+                    corsOK ? 'success' : 'error'
+                );
+            } catch (error) {
+                addResultado(
+                    '❌ Test 4: Error al Verificar CORS',
+                    `<strong>Error:</strong> ${error.message}`,
+                    'error'
+                );
+            }
+        }
+    </script>
+
+    <hr>
+    <h2>📋 Checklist Manual</h2>
+    <ol>
+        <li>
+            <strong>XAMPP está iniciado?</strong>
+            <ul>
+                <li>Apache: <span style="color: green;">●</span> Debe estar en verde</li>
+                <li>MySQL: <span style="color: green;">●</span> Debe estar en verde</li>
+            </ul>
+        </li>
+        <li>
+            <strong>La base de datos existe?</strong>
+            <pre>http://localhost/phpmyadmin
+Buscar base de datos: ristorante
+Tabla: usuarios</pre>
+        </li>
+        <li>
+            <strong>El usuario admin existe?</strong>
+            <pre>SELECT * FROM usuarios WHERE usuario = 'admin';</pre>
+        </li>
+        <li>
+            <strong>La URL del API es correcta?</strong>
+            <pre>http://localhost/Proyecto-Restaurante-Italiano/api.php</pre>
+            <a href="http://localhost/Proyecto-Restaurante-Italiano/api.php" target="_blank">→ Probar en navegador</a>
+        </li>
+    </ol>
+
+    <hr>
+    <h2>🔧 Soluciones Comunes</h2>
+    <details>
+        <summary><strong>Error: "Failed to fetch"</strong></summary>
+        <ul>
+            <li>XAMPP no está iniciado → Abrir panel de control y Start Apache</li>
+            <li>Puerto ocupado → Cambiar puerto en XAMPP config</li>
+            <li>Firewall bloqueando → Permitir Apache en firewall</li>
+        </ul>
+    </details>
+
+    <details>
+        <summary><strong>Error: "Usuario o contraseña incorrectos"</strong></summary>
+        <ul>
+            <li>Verificar en phpMyAdmin que el usuario existe</li>
+            <li>Verificar que el campo 'estado' es 1</li>
+            <li>Re-ejecutar el INSERT del usuario:
+                <pre>INSERT INTO usuarios (usuario, password, rol, estado)
+VALUES ('admin', 'admin123', 'administrador', 1);</pre>
+            </li>
+        </ul>
+    </details>
+
+    <details>
+        <summary><strong>Error: "CORS policy"</strong></summary>
+        <ul>
+            <li>Verificar que existe el archivo .htaccess</li>
+            <li>Verificar que mod_headers está activo en Apache</li>
+            <li>Los headers CORS ya están en api.php</li>
+        </ul>
+    </details>
+</body>
+</html>

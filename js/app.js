@@ -180,10 +180,33 @@ const eventoFormulario = () => {
         errores = [];
         return;
       }
-      alert(
-        `¡Gracias ${datos.nombre}! Tu reserva para ${datos.personas} persona(s) el ${datos.fecha} a las ${datos.hora} ha sido registrada. Te contactaremos pronto.`
-      );
-      formulario.reset();
+
+      // Enviar datos al backend
+      try {
+        const formData = new FormData();
+        Object.keys(datos).forEach(key => {
+          formData.append(key, datos[key]);
+        });
+
+        const response = await fetch(API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.crear, {
+          method: 'POST',
+          body: formData
+        });
+
+        const resultado = await response.json();
+
+        if (resultado.success) {
+          alert(
+            `¡Gracias ${datos.nombre}! Tu reserva para ${datos.personas} persona(s) el ${datos.fecha} a las ${datos.hora} ha sido registrada exitosamente.\n\nTu código de reserva es: ${resultado.codigo}\n\nTe contactaremos pronto para confirmar.`
+          );
+          formulario.reset();
+        } else {
+          alert('Error al crear la reserva: ' + resultado.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al conectar con el servidor. Por favor, intenta nuevamente.');
+      }
     });
   }
 };

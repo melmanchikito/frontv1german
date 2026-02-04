@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login Administración | Ristorante Italini</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Mulish:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/login.css">
+    <script src="js/config.js"></script>
+</head>
+
+<body class="login-body">
+
+    <div class="login-container">
+        <div class="login-card">
+
+            <h2 class="login-logo">
+                Ristorante <span class="verde">Ita</span><span>li</span><span class="rojo">ni</span>
+            </h2>
+
+            <p class="login-subtitulo">Acceso Administración</p>
+
+            <div id="mensajeError" class="login-error ocultar">
+                <p></p>
+            </div>
+
+            <form id="formLogin" class="login-form">
+
+                <input type="text" name="usuario" id="usuario" placeholder="Usuario" required>
+                <input type="password" name="password" id="password" placeholder="Contraseña" required>
+
+                <button type="submit" class="btn btn-rojo btn-full">
+                    Ingresar
+                </button>
+            </form>
+
+            <a href="index.html" class="login-volver">← Volver al sitio</a>
+
+        </div>
+    </div>
+
+    <script src="js/login.js"></script>
+</body>
+
+</html>
