@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch(e) { alert(e.message); }
     }
 
-    window.abrirModalEditar = async function(id) {
+    /*window.abrirModalEditar = async function(id) {
         try {
            const url = API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.obtener + "&id=" + id;
 
@@ -178,7 +178,32 @@ document.addEventListener('DOMContentLoaded', function() {
             modalEditar.style.display='flex';
 
         } catch(e){ alert(e.message); }
+    }*/
+        window.abrirModalEditar = async function(id) {
+
+    console.log("CLICK EDITAR ID:", id);   // 👈 agregar esto
+
+    try {
+        const url = API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.obtener + id;
+        console.log("URL:", url);           // 👈 agregar esto
+
+        const r = await fetchAuth(url);
+        console.log("RESPUESTA:", r);       // 👈 agregar esto
+
+        if (!r.success) return alert(r.message);
+
+        Object.entries(r.data).forEach(([k,v])=>{
+            const el = document.getElementById('edit-'+k);
+            if (el) el.value = v ?? '';
+        });
+
+        modalEditar.style.display = 'flex';
+
+    } catch(e){ 
+        console.error(e);
+        alert(e.message); 
     }
+}
 
     async function actualizarReserva() {
         try {

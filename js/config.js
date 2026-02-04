@@ -3,13 +3,13 @@ const API_CONFIG = {
 
   endpoints: {
     reservas: {
-      crear: '?controller=reserva&action=crear',
-      listar: '?controller=reserva&action=listar',
-      obtener: '?controller=reserva&action=obtenerPorId&id=',
-      actualizarEstado: '?controller=reserva&action=actualizarEstado',
-      actualizar: '?controller=reserva&action=actualizar',
-      eliminar: '?controller=reserva&action=eliminar'
-    },
+  crear: '?controller=reserva&action=crear',
+  listar: '?controller=reserva&action=listar',
+  obtener: '?controller=reserva&action=obtener&id=',
+  actualizar: '?controller=reserva&action=actualizar',
+  actualizarEstado: '?controller=reserva&action=actualizarEstado',
+  eliminar: '?controller=reserva&action=eliminar'
+},
 
     auth: {
       login: '?controller=auth&action=autenticar',
