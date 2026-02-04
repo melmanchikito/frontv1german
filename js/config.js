@@ -1,15 +1,14 @@
 const API_CONFIG = {
-baseURL: 'https://italianiphp.infinityfree.me/Proyecto-Restaurante-Italiano/api_v2.php',  endpoints: {
+  baseURL: 'https://backv1german.onrender.com/',
+
+  endpoints: {
     reservas: {
-      crear: '?accion=crear',
-      listar: '?accion=listar',
-      listarPorEstado: '?accion=listar-por-estado&estado=',
-      obtener: '?accion=obtener&id=',
-      actualizarEstado: '?accion=actualizar-estado',
-      actualizar: '?accion=actualizar',
-      eliminar: '?accion=eliminar',
-      estadisticas: '?accion=estadisticas'
+      crear: '?controller=reserva&action=crear',
+      listar: '?controller=reserva&action=listar',
+      actualizar: '?controller=reserva&action=actualizar',
+      eliminar: '?controller=reserva&action=eliminar'
     },
+
     auth: {
       login: '?controller=auth&action=autenticar',
       logout: '?controller=auth&action=logout'
