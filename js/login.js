@@ -1,9 +1,12 @@
-// Login functionality
-//console.log("LOGIN JS CARGADO");
-
 document.addEventListener('DOMContentLoaded', function() {
+
     const formLogin = document.getElementById('formLogin');
     const mensajeError = document.getElementById('mensajeError');
+
+    if (!formLogin) {
+        console.error("No existe formLogin");
+        return;
+    }
 
     formLogin.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -16,34 +19,33 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append('usuario', usuario);
             formData.append('password', password);
 
-            const response = await fetch(API_CONFIG.baseURL + API_CONFIG.endpoints.auth.login, {
+            const url = API_CONFIG.baseURL + API_CONFIG.endpoints.auth.login;
+            console.log("LOGIN URL:", url);
+
+            const response = await fetch(url, {
                 method: 'POST',
-                body: formData,
-                credentials: 'include' // Para enviar cookies de sesión
+                body: formData
             });
 
-            // Si la respuesta es una redirección, seguirla
-            if (response.redirected) {
-                window.location.href = 'admin-reservas.html';
-                return;
-            }
-
             const contentType = response.headers.get('content-type');
+
             if (contentType && contentType.includes('application/json')) {
+
                 const resultado = await response.json();
-                
+
                 if (resultado.success) {
                     window.location.href = 'admin-reservas.html';
                 } else {
                     mostrarError(resultado.message || 'Usuario o contraseña incorrectos');
                 }
+
             } else {
-                // Si no es JSON, asumimos que fue exitoso y redirigimos
-                window.location.href = 'admin-reservas.html';
+                mostrarError('Respuesta inválida del servidor');
             }
+
         } catch (error) {
             console.error('Error:', error);
-            mostrarError('Error al conectar con el servidor. Por favor, intenta nuevamente.');
+            mostrarError('Error al conectar con el servidor');
         }
     });
 
@@ -55,4 +57,5 @@ document.addEventListener('DOMContentLoaded', function() {
             mensajeError.classList.add('ocultar');
         }, 5000);
     }
+
 });
