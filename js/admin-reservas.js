@@ -1,10 +1,9 @@
-// Administración de Reservas
 document.addEventListener('DOMContentLoaded', function() {
+
     let reservas = [];
     let filtroActual = 'todas';
     let busquedaActual = '';
 
-    // Elementos del DOM
     const cuerpoTabla = document.getElementById('cuerpoTabla');
     const mensajeLoading = document.getElementById('mensajeLoading');
     const mensajeError = document.getElementById('mensajeError');
@@ -12,25 +11,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const tablaReservas = document.getElementById('tablaReservas');
     const buscador = document.getElementById('buscarReserva');
     const botonesFiltro = document.querySelectorAll('.btn-filtro');
-    
-    // Estadísticas
+
     const totalReservas = document.getElementById('totalReservas');
     const totalPendientes = document.getElementById('totalPendientes');
     const totalConfirmadas = document.getElementById('totalConfirmadas');
     const totalCanceladas = document.getElementById('totalCanceladas');
 
-    // Modal de comentarios
     const modal = document.getElementById('modalComentarios');
     const textoComentarios = document.getElementById('textoComentarios');
 
-    // Modal de edición
     const modalEditar = document.getElementById('modalEditar');
     const formEditar = document.getElementById('formEditar');
 
-    // Cargar reservas al iniciar
+    // ✅ FETCH CENTRALIZADO
+    async function fetchAuth(url, options = {}) {
+        const res = await fetch(url, {
+            credentials: 'include',
+            ...options
+        });
+
+        const contentType = res.headers.get("content-type");
+
+        if (!contentType || !contentType.includes("application/json")) {
+            throw new Error("Respuesta no es JSON (posible error CORS o sesión)");
+        }
+
+        return res.json();
+    }
+
     cargarReservas();
 
-    // Event Listeners
     botonesFiltro.forEach(btn => {
         btn.addEventListener('click', function() {
             botonesFiltro.forEach(b => b.classList.remove('activo'));
@@ -40,36 +50,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    buscador.addEventListener('input', function(e) {
+    buscador.addEventListener('input', e => {
         busquedaActual = e.target.value.toLowerCase();
         filtrarReservas();
     });
 
-    // Event listener para el formulario de edición
-    formEditar.addEventListener('submit', function(e) {
+    formEditar.addEventListener('submit', e => {
         e.preventDefault();
         actualizarReserva();
     });
 
-    // También cerrar con tecla ESC
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            if (!modal.classList.contains('ocultar')) {
-                cerrarModalComentarios();
-            }
-            if (!modalEditar.classList.contains('ocultar')) {
-                cerrarModalEditar();
-            }
-        }
-    });
-
-    // Función para cargar reservas
     async function cargarReservas() {
         try {
-            const response = await fetch(API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.listar, {
-                credentials: 'include'
-            });
-            const resultado = await response.json();
+            const url = API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.listar;
+            const resultado = await fetchAuth(url);
 
             mensajeLoading.classList.add('ocultar');
 
@@ -80,38 +74,35 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 mostrarError(resultado.message);
             }
+
         } catch (error) {
             mensajeLoading.classList.add('ocultar');
-            mostrarError('Error al cargar las reservas: ' + error.message);
+            mostrarError(error.message);
         }
     }
 
-    // Función para filtrar reservas
     function filtrarReservas() {
-        let reservasFiltradas = reservas;
+        let datos = reservas;
 
-        // Filtrar por estado
         if (filtroActual !== 'todas') {
-            reservasFiltradas = reservasFiltradas.filter(r => r.estado === filtroActual);
+            datos = datos.filter(r => r.estado === filtroActual);
         }
 
-        // Filtrar por búsqueda
         if (busquedaActual) {
-            reservasFiltradas = reservasFiltradas.filter(r => 
+            datos = datos.filter(r =>
                 r.nombre.toLowerCase().includes(busquedaActual) ||
                 r.email.toLowerCase().includes(busquedaActual) ||
                 r.codigo.toLowerCase().includes(busquedaActual)
             );
         }
 
-        renderizarTabla(reservasFiltradas);
+        renderizarTabla(datos);
     }
 
-    // Función para renderizar la tabla
     function renderizarTabla(datos) {
         cuerpoTabla.innerHTML = '';
 
-        if (datos.length === 0) {
+        if (!datos.length) {
             tablaReservas.classList.add('ocultar');
             mensajeVacio.classList.remove('ocultar');
             return;
@@ -120,58 +111,26 @@ document.addEventListener('DOMContentLoaded', function() {
         tablaReservas.classList.remove('ocultar');
         mensajeVacio.classList.add('ocultar');
 
-        datos.forEach(reserva => {
+        datos.forEach(r => {
             const fila = document.createElement('tr');
-            
-            const ocasionTexto = reserva.ocasion || 'No especificada';
-            const comentariosTexto = reserva.comentarios || 'Sin comentarios';
-            const comentariosCorto = comentariosTexto.length > 50 
-                ? comentariosTexto.substring(0, 50) + '...' 
-                : comentariosTexto;
 
             fila.innerHTML = `
-                <td><strong>${reserva.codigo}</strong></td>
-                <td>${reserva.nombre}</td>
-                <td>${reserva.email}</td>
-                <td>${reserva.telefono}</td>
-                <td><strong>${reserva.fecha_hora}</strong></td>
-                <td><strong>${reserva.personas}</strong></td>
-                <td>${ocasionTexto}</td>
+                <td><strong>${r.codigo}</strong></td>
+                <td>${r.nombre}</td>
+                <td>${r.email}</td>
+                <td>${r.telefono}</td>
+                <td><strong>${r.fecha_hora}</strong></td>
+                <td>${r.personas}</td>
+                <td>${r.ocasion || 'No especificada'}</td>
+                <td>${(r.comentarios || '').substring(0,50)}</td>
+                <td><span class="badge-estado badge-${r.estado}">${r.estado}</span></td>
                 <td>
-                    ${comentariosTexto.length > 50 
-                        ? `<span class="comentarios-corto">${comentariosCorto}</span>
-                           <button class="btn-accion btn-ver" onclick="verComentarios('${reserva.id}')">Ver más</button>`
-                        : comentariosTexto
-                    }
+                    <button onclick="abrirModalEditar(${r.id})">✏️</button>
+                    <button onclick="cambiarEstado(${r.id}, 'confirmada')">✔</button>
+                    <button onclick="cambiarEstado(${r.id}, 'cancelada')">✖</button>
                 </td>
                 <td>
-                    <span class="badge-estado badge-${reserva.estado}">
-                        ${reserva.estado.charAt(0).toUpperCase() + reserva.estado.slice(1)}
-                    </span>
-                </td>
-                <td>
-                    <div class="acciones-reserva">
-                        <button class="btn-accion btn-ver" onclick="abrirModalEditar(${reserva.id})" title="Editar">
-                            ✏️ Editar
-                        </button>
-                        ${reserva.estado !== 'confirmada' 
-                            ? `<button class="btn-accion btn-confirmar" onclick="cambiarEstado(${reserva.id}, 'confirmada')">
-                                Confirmar
-                               </button>`
-                            : ''
-                        }
-                        ${reserva.estado !== 'cancelada' 
-                            ? `<button class="btn-accion btn-cancelar" onclick="cambiarEstado(${reserva.id}, 'cancelada')">
-                                Cancelar
-                               </button>`
-                            : ''
-                        }
-                    </div>
-                </td>
-                <td style="text-align: center;">
-                    <button class="btn-eliminar" onclick="eliminarReserva(${reserva.id})" title="Eliminar reserva">
-                        ✖
-                    </button>
+                    <button onclick="eliminarReserva(${r.id})">🗑</button>
                 </td>
             `;
 
@@ -179,174 +138,82 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Función para actualizar estadísticas
     function actualizarEstadisticas() {
-        const pendientes = reservas.filter(r => r.estado === 'pendiente').length;
-        const confirmadas = reservas.filter(r => r.estado === 'confirmada').length;
-        const canceladas = reservas.filter(r => r.estado === 'cancelada').length;
-
         totalReservas.textContent = reservas.length;
-        totalPendientes.textContent = pendientes;
-        totalConfirmadas.textContent = confirmadas;
-        totalCanceladas.textContent = canceladas;
+        totalPendientes.textContent = reservas.filter(r=>r.estado==='pendiente').length;
+        totalConfirmadas.textContent = reservas.filter(r=>r.estado==='confirmada').length;
+        totalCanceladas.textContent = reservas.filter(r=>r.estado==='cancelada').length;
     }
 
-    // Función para cambiar estado (global para que sea accesible desde el HTML)
-    window.cambiarEstado = async function(id, nuevoEstado) {
-        if (!confirm(`¿Está seguro de cambiar el estado a "${nuevoEstado}"?`)) {
-            return;
-        }
+    window.cambiarEstado = async function(id, estado) {
+        const fd = new FormData();
+        fd.append('id', id);
+        fd.append('estado', estado);
 
         try {
-            const formData = new FormData();
-            formData.append('id', id);
-            formData.append('estado', nuevoEstado);
+            const url = API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.actualizarEstado;
+            const r = await fetchAuth(url, { method:'POST', body: fd });
 
-            const response = await fetch(API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.actualizarEstado, {
-                method: 'POST',
-                body: formData,
-                credentials: 'include'
-            });
+            if (r.success) cargarReservas();
+            else alert(r.message);
 
-            const resultado = await response.json();
+        } catch(e) { alert(e.message); }
+    }
 
-            if (resultado.success) {
-                alert('Estado actualizado correctamente');
-                cargarReservas();
-            } else {
-                alert('Error: ' + resultado.message);
-            }
-        } catch (error) {
-            alert('Error al actualizar el estado: ' + error.message);
-        }
-    };
-
-    // Función para ver comentarios completos
-    window.verComentarios = function(id) {
-        const reserva = reservas.find(r => r.id == id);
-        if (reserva) {
-            textoComentarios.textContent = reserva.comentarios || 'Sin comentarios';
-            if (modal) {
-                modal.classList.remove('ocultar');
-                modal.style.display = 'flex';
-            }
-        }
-    };
-
-    // Función para cerrar modal de comentarios
-    window.cerrarModalComentarios = function() {
-        if (modal) {
-            modal.classList.add('ocultar');
-            modal.style.display = 'none';
-        }
-    };
-
-    // Función para abrir modal de edición
     window.abrirModalEditar = async function(id) {
-        const reserva = reservas.find(r => r.id == id);
-        if (!reserva) {
-            alert('Reserva no encontrada');
-            return;
-        }
-
-        // Obtener datos completos de la reserva
         try {
-            const response = await fetch(API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.obtener + id, {
-                credentials: 'include'
+            const url = API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.obtener + id;
+            const r = await fetchAuth(url);
+
+            if (!r.success) return alert(r.message);
+
+            Object.entries(r.data).forEach(([k,v])=>{
+                const el = document.getElementById('edit-'+k);
+                if (el) el.value = v ?? '';
             });
-            const resultado = await response.json();
 
-            if (resultado.success) {
-                const datos = resultado.data;
-                
-                // Llenar el formulario
-                document.getElementById('edit-id').value = datos.id;
-                document.getElementById('edit-codigo').value = datos.codigo;
-                document.getElementById('edit-nombre').value = datos.nombre;
-                document.getElementById('edit-email').value = datos.email;
-                document.getElementById('edit-telefono').value = datos.telefono;
-                document.getElementById('edit-fecha').value = datos.fecha;
-                document.getElementById('edit-hora').value = datos.hora;
-                document.getElementById('edit-personas').value = datos.personas;
-                document.getElementById('edit-ocasion').value = datos.ocasion || '';
-                document.getElementById('edit-comentarios').value = datos.comentarios || '';
+            modalEditar.style.display='flex';
 
-                // Mostrar modal
-                modalEditar.classList.remove('ocultar');
-                modalEditar.style.display = 'flex';
-            } else {
-                alert('Error al obtener los datos: ' + resultado.message);
-            }
-        } catch (error) {
-            alert('Error al cargar la reserva: ' + error.message);
-        }
-    };
+        } catch(e){ alert(e.message); }
+    }
 
-    // Función para cerrar modal de edición
-    window.cerrarModalEditar = function() {
-        if (modalEditar) {
-            modalEditar.classList.add('ocultar');
-            modalEditar.style.display = 'none';
-            formEditar.reset();
-        }
-    };
-
-    // Función para actualizar reserva
     async function actualizarReserva() {
         try {
-            const formData = new FormData(formEditar);
+            const fd = new FormData(formEditar);
+            const url = API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.actualizar;
 
-            const response = await fetch(API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.actualizar, {
-                method: 'POST',
-                body: formData,
-                credentials: 'include'
-            });
+            const r = await fetchAuth(url, { method:'POST', body: fd });
 
-            const resultado = await response.json();
-
-            if (resultado.success) {
-                alert('Reserva actualizada correctamente');
+            if (r.success) {
                 cerrarModalEditar();
                 cargarReservas();
-            } else {
-                alert('Error al actualizar: ' + resultado.message);
-            }
-        } catch (error) {
-            alert('Error: ' + error.message);
-        }
+            } else alert(r.message);
+
+        } catch(e){ alert(e.message); }
     }
 
-    // Función para eliminar reserva
     window.eliminarReserva = async function(id) {
-        if (!confirm('¿Está seguro de que desea eliminar esta reserva? Esta acción no se puede deshacer.')) {
-            return;
-        }
+        const fd = new FormData();
+        fd.append('id', id);
 
         try {
-            const formData = new FormData();
-            formData.append('id', id);
+            const url = API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.eliminar;
+            const r = await fetchAuth(url, { method:'POST', body: fd });
 
-            const response = await fetch(API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.eliminar, {
-                method: 'POST',
-                body: formData,
-                credentials: 'include'
-            });
+            if (r.success) cargarReservas();
+            else alert(r.message);
 
-            const resultado = await response.json();
+        } catch(e){ alert(e.message); }
+    }
 
-            if (resultado.success) {
-                alert('Reserva eliminada correctamente');
-                cargarReservas();
-            } else {
-                alert('Error al eliminar: ' + resultado.message);
-            }
-        } catch (error) {
-            alert('Error: ' + error.message);
-        }
+    window.cerrarModalEditar = () => {
+        modalEditar.style.display='none';
+        formEditar.reset();
     };
 
-    function mostrarError(mensaje) {
-        mensajeError.querySelector('p').textContent = mensaje;
+    function mostrarError(m) {
+        mensajeError.querySelector('p').textContent = m;
         mensajeError.classList.remove('ocultar');
     }
+
 });

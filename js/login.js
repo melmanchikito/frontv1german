@@ -15,16 +15,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const password = document.getElementById('password').value;
 
         try {
+
             const formData = new FormData();
             formData.append('usuario', usuario);
             formData.append('password', password);
 
             const url = API_CONFIG.baseURL + API_CONFIG.endpoints.auth.login;
-            console.log("LOGIN URL:", url);
 
             const response = await fetch(url, {
                 method: 'POST',
-                body: formData
+                body: formData,
+                credentials: 'include'   // ✅ IMPORTANTE
             });
 
             const contentType = response.headers.get('content-type');
