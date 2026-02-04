@@ -179,28 +179,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
         } catch(e){ alert(e.message); }
     }*/
-        window.abrirModalEditar = async function(id) {
+     window.abrirModalEditar = async function(id) {
 
-    console.log("CLICK EDITAR ID:", id);   // 👈 agregar esto
+    console.log("CLICK EDITAR ID:", id);
 
     try {
-        const url = API_CONFIG.baseURL + API_CONFIG.endpoints.reservas.obtener + id;
-        console.log("URL:", url);           // 👈 agregar esto
+
+        const url = API_CONFIG.baseURL +
+                    API_CONFIG.endpoints.reservas.obtener +
+                    "&id=" + id;
+
+        console.log("URL:", url);
 
         const r = await fetchAuth(url);
-        console.log("RESPUESTA:", r);       // 👈 agregar esto
 
-        if (!r.success) return alert(r.message);
+        console.log("RESPUESTA:", r);
+
+        if (!r.success) {
+            alert(r.message);
+            return;
+        }
 
         Object.entries(r.data).forEach(([k,v])=>{
-            const el = document.getElementById('edit-'+k);
+            const el = document.getElementById('edit-' + k);
             if (el) el.value = v ?? '';
         });
 
         modalEditar.style.display = 'flex';
 
     } catch(e){ 
-        console.error(e);
+        console.error("ERROR EDITAR:", e);
         alert(e.message); 
     }
 }
