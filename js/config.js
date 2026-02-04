@@ -5,10 +5,10 @@ const API_CONFIG = {
     reservas: {
   crear: '?controller=reserva&action=crear',
   listar: '?controller=reserva&action=listar',
-  obtener: '?controller=reserva&action=obtener&id=',
+  obtener: '?controller=reserva&action=obtenerPorId',   // ✅ FIX
   actualizar: '?controller=reserva&action=actualizar',
-  actualizarEstado: '?controller=reserva&action=actualizarEstado',
-  eliminar: '?controller=reserva&action=eliminar'
+  eliminar: '?controller=reserva&action=eliminar',
+  actualizarEstado: '?controller=reserva&action=actualizarEstado'
 },
 
     auth: {
