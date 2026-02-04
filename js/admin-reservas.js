@@ -205,7 +205,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (el) el.value = v ?? '';
         });
 
-        modalEditar.style.display = 'flex';
+        modalEditar.classList.remove('ocultar');
+
 
     } catch(e){ 
         console.error("ERROR EDITAR:", e);
@@ -243,9 +244,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     window.cerrarModalEditar = () => {
-        modalEditar.style.display='none';
-        formEditar.reset();
-    };
+    modalEditar.classList.add('ocultar');
+    formEditar.reset();
+};
 
     function mostrarError(m) {
         mensajeError.querySelector('p').textContent = m;
