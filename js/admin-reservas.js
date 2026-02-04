@@ -189,11 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     API_CONFIG.endpoints.reservas.obtener +
                     "&id=" + id;
 
-        console.log("URL:", url);
-
         const r = await fetchAuth(url);
-
-        console.log("RESPUESTA:", r);
 
         if (!r.success) {
             alert(r.message);
@@ -205,14 +201,15 @@ document.addEventListener('DOMContentLoaded', function() {
             if (el) el.value = v ?? '';
         });
 
+        // ✅ SOLO ESTO
         modalEditar.classList.remove('ocultar');
 
-
     } catch(e){ 
-        console.error("ERROR EDITAR:", e);
+        console.error(e);
         alert(e.message); 
     }
 }
+
 
     async function actualizarReserva() {
         try {
@@ -243,10 +240,11 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch(e){ alert(e.message); }
     }
 
-    window.cerrarModalEditar = () => {
+   window.cerrarModalEditar = () => {
     modalEditar.classList.add('ocultar');
     formEditar.reset();
 };
+
 
     function mostrarError(m) {
         mensajeError.querySelector('p').textContent = m;
